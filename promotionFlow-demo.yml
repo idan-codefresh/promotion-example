@@ -1,0 +1,42 @@
+# PromotionFlow Configuration
+# This Custom Resource Definition (CRD) orchestrates the promotion of applications across multiple environments in Codefresh.
+# Triggering starts from a designated "trigger environment," indicated by a commit message formatted as "[promotion:{promotionFlow-name}]", e.g., "[promotion:demo]".
+# The `postTrigger` defines an Argo Workflow that is executed post-update, used primarily for validation or testing.
+# The `steps` list outlines the stages of promotion, with detailed configuration provided for the first environment as an example.
+
+apiVersion: codefresh.io/v1beta1
+kind: PromotionFlow
+metadata:
+  name: demo
+  annotations:
+    version: 0.0.1
+    description: Flow to show parallel deployment
+spec:
+  triggerEnvironment: dev  # Initiates the promotion process based on updates in this environment.
+  postTrigger: post-action  # Argo Workflow executed following updates in the trigger environment.
+
+  steps:
+    - environment: qa  # First environment in the promotion sequence.
+      dependsOn:
+        - dev  # Depends on successful update in 'dev' environment.
+      policy:
+        preAction: pre-action  # Argo Workflow executed to prepare the environment before promotion.
+        postAction: smoketests  # Argo Workflow for validation post-promotion.
+        action: commit  # Automatically progresses to the next promotion stage.
+
+    - environment: staging
+      dependsOn:
+        - dev
+      policy:
+        preAction: pre-action
+        postAction: post-action
+        action: commit
+
+    - environment: production
+      dependsOn:
+        - staging
+        - qa
+      policy:
+        preAction: pre-action
+        postAction: post-action
+        action: commit
