@@ -25,7 +25,7 @@ spec:
   # Version Source Configuration:
   # Specifies the file and JSON path used to retrieve the application version for display in the dashboard.
   versionSource:
-    file: chart.yaml  # The file where the version is stored.
+    file: Chart.yaml  # The file where the version is stored.
     jsonPath: $.appVersion  # JSON path to the version within the specified file.
 
   # Promotion Configuration:
@@ -38,7 +38,7 @@ spec:
         - $.dependencies  # Promotes dependencies listed in the file.
     values.yaml:  # Attributes from values.yaml to be promoted.
       jsonPaths:
-        - $.image  # Promotes the image specifications.
+        - $.*.image  # Promotes the image specifications.
     requirements.yaml:  # Attributes from requirements.yaml to be promoted.
       jsonPaths:
         - "$.dependencies"  # Promotes dependencies.
