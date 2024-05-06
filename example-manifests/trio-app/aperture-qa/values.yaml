@@ -1,0 +1,45 @@
+buslog:
+  image:
+    tag: main-96b4254
+    repository: docker.io/aperturesci/buslog
+  replicaCount: 3
+  rollout:
+    strategy:
+      canary:
+        steps:
+          - setWeight: 20
+          - pause:
+              duration: 10s
+          - setWeight: 100
+ctrlr:
+  image:
+    tag: main-303c84a
+    repository: docker.io/aperturesci/ctrlr
+  replicaCount: 3
+  rollout:
+    strategy:
+      canary:
+        steps:
+          - setWeight: 20
+          - pause:
+              duration: 30s
+          - setWeight: 50
+          - pause:
+              duration: 30s
+          - setWeight: 100
+flask-ui:
+  image:
+    tag: main-1c56dec
+    repository: docker.io/aperturesci/flask-ui
+  replicaCount: 3
+  rollout:
+    strategy:
+      canary:
+        steps:
+          - setWeight: 20
+          - pause:
+              duration: 30s
+          - setWeight: 50
+          - pause:
+              duration: 30s
+          - setWeight: 100
