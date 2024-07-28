@@ -1,0 +1,21 @@
+# PromotionTemplate Configuration
+# This PromotionTemplate resource is primarily used for two functions in Codefresh:
+# 1. Version Tracking: It defines the location (i.e., the file and path within the file) where the application version is stored.
+#    This version is then displayed in the application, product, and environment dashboards via the `versionSource` attribute.
+# 2. Attribute Promotion: It specifies which attributes and files should be promoted during a promotion process using the `promotion` attribute.
+#    Attributes are selected using JSON path selectors, allowing for specific or general targeting within the files.
+# The applicability of the PromotionTemplate to specific applications is determined by the `applicationSourceSelector` property,
+# which utilizes Kubernetes selectors like `matchExpressions` or `matchLabels` to define the scope of application.
+
+apiVersion: codefresh.io/v1beta1
+kind: PromotionTemplate
+metadata:
+  name: version-only
+spec:
+  
+
+  # Version Source Configuration:
+  # Specifies the file and JSON path used to retrieve the application version for display in the dashboard.
+  versionSource:
+    file: version.yaml  # The file where the version is stored.
+    jsonPath: $.version  # JSON path to the version within the specified file.
